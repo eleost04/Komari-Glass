@@ -42,7 +42,7 @@ function StatItem({
       </div>
       <div className="flex min-w-0 items-baseline gap-1.5">
         <span
-          className={`truncate text-[25px] font-semibold leading-none tabular-nums tracking-normal sm:text-[28px] ${valueClassName || ""}`}
+          className={`truncate text-[22px] font-semibold leading-none tabular-nums tracking-normal sm:text-[28px] ${valueClassName || ""}`}
           title={value}
         >
           {value}
@@ -53,7 +53,7 @@ function StatItem({
           </span>
         ) : null}
       </div>
-      <div className="mt-1.5 flex min-h-4 items-center gap-2 overflow-hidden text-[11px] text-muted-foreground sm:text-xs">
+      <div className="mt-1.5 flex min-h-[34px] sm:min-h-4 flex-col sm:flex-row sm:items-center sm:gap-x-2.5 gap-y-0.5 text-[11px] text-muted-foreground sm:text-xs">
         {children}
       </div>
     </div>
@@ -97,7 +97,7 @@ export function StatsBar() {
         <span className="truncate">
           剩余 {formatCurrencyValue(overview.remainingValue, overview.currency)}
         </span>
-        <span className="shrink-0">{overview.paidCount} 台计费</span>
+        <span className="shrink-0 whitespace-nowrap">{overview.paidCount} 台计费</span>
       </StatItem>
     );
   }
@@ -111,35 +111,37 @@ export function StatsBar() {
         value={traffic.value}
         unit={traffic.unit}
       >
-        <span className="inline-flex shrink-0 items-center gap-1 text-success">
+        <span className="inline-flex shrink-0 items-center gap-1 text-success whitespace-nowrap">
           <span>上传</span>
           {formatBytes(overview.trafficUp)}
         </span>
-        <span className="inline-flex min-w-0 items-center gap-1 text-info">
-          <span className="shrink-0">下载</span>
-          <span className="truncate">{formatBytes(overview.trafficDown)}</span>
+        <span className="inline-flex shrink-0 items-center gap-1 text-info whitespace-nowrap">
+          <span>下载</span>
+          <span>{formatBytes(overview.trafficDown)}</span>
         </span>
       </StatItem>
     );
   }
 
   if (settings.showSpeed) {
+    const totalSpeed = formatBytesSplit(overview.speedUp + overview.speedDown);
     items.push(
       <StatItem
         key="speed"
         icon={<Activity className="size-4" />}
         label="实时网速"
-        value={formatBytesPerSecond(overview.speedUp + overview.speedDown)}
+        value={totalSpeed.value}
+        unit={`${totalSpeed.unit}/s`}
       >
-        <span className="inline-flex min-w-0 items-center gap-1 text-success">
+        <span className="inline-flex shrink-0 items-center gap-1 text-success whitespace-nowrap">
           <ArrowUp className="size-3 shrink-0" />
-          <span className="truncate">
+          <span>
             {formatBytesPerSecond(overview.speedUp)}
           </span>
         </span>
-        <span className="inline-flex min-w-0 items-center gap-1 text-info">
+        <span className="inline-flex shrink-0 items-center gap-1 text-info whitespace-nowrap">
           <ArrowDown className="size-3 shrink-0" />
-          <span className="truncate">
+          <span>
             {formatBytesPerSecond(overview.speedDown)}
           </span>
         </span>

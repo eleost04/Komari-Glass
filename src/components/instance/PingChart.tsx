@@ -273,10 +273,12 @@ export function PingChart({
             />
             <Tooltip
               labelFormatter={formatChartTooltipLabel as never}
-              formatter={((v: number, name: string) => [
-                `${Number(v).toFixed(1)} ms`,
-                name,
-              ]) as never}
+              formatter={((v: unknown, name: string) => {
+                if (v === null || v === undefined || !Number.isFinite(Number(v))) {
+                  return ["无数据", name];
+                }
+                return [`${Number(v).toFixed(1)} ms`, name];
+              }) as never}
               contentStyle={{
                 borderRadius: 8,
                 border: "1px solid var(--border)",

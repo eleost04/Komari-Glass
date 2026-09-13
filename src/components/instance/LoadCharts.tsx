@@ -82,6 +82,7 @@ function toPoints(records: HistoryRecord[]): LoadPoint[] {
 }
 
 function resourceTicks(total: number): number[] {
+  if (!Number.isFinite(total) || total <= 0) return [0, 1];
   return Array.from({ length: 5 }, (_, index) => (total * index) / 4);
 }
 
@@ -194,8 +195,8 @@ export function LoadCharts({
   }
 
   const last = samples[samples.length - 1];
-  const memoryTotal = node.mem_total;
-  const diskTotal = node.disk_total;
+  const memoryTotal = Number.isFinite(node.mem_total) && node.mem_total > 0 ? node.mem_total : 1;
+  const diskTotal = Number.isFinite(node.disk_total) && node.disk_total > 0 ? node.disk_total : 1;
   const timeAxisProps: ComponentProps<typeof XAxis> = {
     dataKey: "time",
     type: "number",
@@ -219,10 +220,12 @@ export function LoadCharts({
             <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} width={36} />
             <Tooltip
               labelFormatter={formatChartTooltipLabel as never}
-              formatter={((v: number) => [
-                `${Number(v).toFixed(2)}%`,
-                "CPU",
-              ]) as never}
+              formatter={((v: unknown) => {
+                if (v === null || v === undefined || !Number.isFinite(Number(v))) {
+                  return ["无数据", "CPU"];
+                }
+                return [`${Number(v).toFixed(2)}%`, "CPU"];
+              }) as never}
               contentStyle={TOOLTIP_STYLE}
             />
             <Area
@@ -257,10 +260,12 @@ export function LoadCharts({
             />
             <Tooltip
               labelFormatter={formatChartTooltipLabel as never}
-              formatter={((v: number) => [
-                formatBytes(Number(v)),
-                "内存",
-              ]) as never}
+              formatter={((v: unknown) => {
+                if (v === null || v === undefined || !Number.isFinite(Number(v))) {
+                  return ["无数据", "内存"];
+                }
+                return [formatBytes(Number(v)), "内存"];
+              }) as never}
               contentStyle={TOOLTIP_STYLE}
             />
             <Area
@@ -295,10 +300,12 @@ export function LoadCharts({
             />
             <Tooltip
               labelFormatter={formatChartTooltipLabel as never}
-              formatter={((v: number) => [
-                formatBytes(Number(v)),
-                "硬盘",
-              ]) as never}
+              formatter={((v: unknown) => {
+                if (v === null || v === undefined || !Number.isFinite(Number(v))) {
+                  return ["无数据", "硬盘"];
+                }
+                return [formatBytes(Number(v)), "硬盘"];
+              }) as never}
               contentStyle={TOOLTIP_STYLE}
             />
             <Area
@@ -330,10 +337,13 @@ export function LoadCharts({
             />
             <Tooltip
               labelFormatter={formatChartTooltipLabel as never}
-              formatter={((v: number, name: string) => [
-                formatBytesPerSecond(Number(v)),
-                name === "net_out" ? "上行" : "下行",
-              ]) as never}
+              formatter={((v: unknown, name: string) => {
+                const label = name === "net_out" ? "上行" : "下行";
+                if (v === null || v === undefined || !Number.isFinite(Number(v))) {
+                  return ["无数据", label];
+                }
+                return [formatBytesPerSecond(Number(v)), label];
+              }) as never}
               contentStyle={TOOLTIP_STYLE}
             />
             <Area
