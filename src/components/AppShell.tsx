@@ -14,7 +14,7 @@ export function AppShell() {
     <div className="relative z-[2] flex min-h-dvh flex-col">
       <Header />
       <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 pb-6 pt-4 sm:px-6 sm:pt-5 lg:px-8">
-        {loading && route.name === "home" ? (
+        {loading ? (
           <Loading />
         ) : route.name === "home" ? (
           <HomePage />

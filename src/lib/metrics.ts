@@ -46,11 +46,16 @@ export function hasTrafficLimit(node: Pick<NodeData, "traffic_limit">): boolean 
 
 function mergeNode(
   node: NodeData,
-  live?: LiveStatus
+  live?: LiveStatus,
+  liveReady = false
 ): DisplayNode {
+  // 未收到实时推流（liveReady 为 false 且无实时状态）时，默认保持正常在线状态，
+  // 遵循“先正常加载渲染，再依据实时推送判定在线/离线”的原则，消除瞬间误判为离线的闪烁
+  const online = live !== undefined ? live.online : !liveReady;
+
   return {
     ...node,
-    online: live?.online ?? false,
+    online,
     cpu: live?.cpu ?? 0,
     ram: live?.ram ?? 0,
     disk: live?.disk ?? 0,
@@ -74,7 +79,8 @@ export function mergeNodes(
   nodes: NodeData[],
   liveMap: LiveStatusMap | null
 ): DisplayNode[] {
-  return nodes.map((n) => mergeNode(n, liveMap?.[n.uuid]));
+  const liveReady = liveMap !== null;
+  return nodes.map((n) => mergeNode(n, liveMap?.[n.uuid], liveReady));
 }
 
 export function calcOverview(

@@ -129,6 +129,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     FALLBACK_EXCHANGE_RATES
   );
   const themeSwitchFrame = useRef<number | null>(null);
+  const httpReadyRef = useRef(false);
+  const liveReadyRef = useRef(false);
+  const safetyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const finishLoading = useCallback(() => {
+    if (safetyTimeoutRef.current) {
+      clearTimeout(safetyTimeoutRef.current);
+      safetyTimeoutRef.current = null;
+    }
+    setLoading(false);
+  }, []);
 
   const settings = useMemo(
     () => mergeThemeSettings(publicInfo?.theme_settings),
@@ -180,12 +191,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // init appearance from localStorage or theme default
       const defaults = mergeThemeSettings(pub.theme_settings);
       setAppearanceState(readStoredAppearance(defaults.defaultAppearance));
+      httpReadyRef.current = true;
+
+      // 如果实时推流首帧已就绪或无节点，立即结束 loading
+      if (liveReadyRef.current || nodes.length === 0) {
+        finishLoading();
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "加载失败");
-    } finally {
-      setLoading(false);
+      finishLoading();
     }
-  }, []);
+  }, [finishLoading]);
 
   // bootstrap
   useEffect(() => {
@@ -241,17 +257,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // live websocket
+  // live websocket: 挂载即并行连接，并在收到首帧后同步结束 loading
   useEffect(() => {
-    if (loading) return;
     const ws = getLiveWebSocket();
-    const unsub = ws.subscribe(setLiveMap);
+    const unsub = ws.subscribe((map) => {
+      setLiveMap(map);
+      liveReadyRef.current = true;
+      if (httpReadyRef.current) {
+        finishLoading();
+      }
+    });
     ws.connect();
+
+    // 兜底定时器：防止网络极端异常导致 loading 无法关闭
+    safetyTimeoutRef.current = setTimeout(() => {
+      if (httpReadyRef.current) {
+        finishLoading();
+      }
+    }, 800);
+
     return () => {
       unsub();
       ws.disconnect();
+      if (safetyTimeoutRef.current) {
+        clearTimeout(safetyTimeoutRef.current);
+        safetyTimeoutRef.current = null;
+      }
     };
-  }, [loading]);
+  }, [finishLoading]);
 
   // apply dark class + background
   useEffect(() => {
