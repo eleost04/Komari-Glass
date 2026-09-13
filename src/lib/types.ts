@@ -63,6 +63,8 @@ export interface NodeData {
   group: string;
   tags: string;
   public_remark?: string;
+  ipv4?: string;
+  ipv6?: string;
   traffic_limit: number;
   traffic_limit_type: TrafficLimitType;
   updated_at: string;

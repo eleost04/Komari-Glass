@@ -26,7 +26,7 @@ export function Header() {
           {/* Komari serves the admin-configured favicon from this stable path. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/favicon.ico"
+            src="/favicon.ico?v=2"
             alt=""
             className="size-9 shrink-0 object-contain"
           />

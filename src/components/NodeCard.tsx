@@ -65,11 +65,14 @@ export function NodeCard({
   );
   const limited = hasTrafficLimit(node);
   const paid = isPaidPrice(node.price);
-  const free = node.price === -1;
+  const free = node.price === -1 || node.price === 0;
+  const isOneTime = node.billing_cycle === -1;
   const expireStatus = getExpireStatus(node.expired_at);
   const remainingDays = getDaysUntilExpired(node.expired_at);
   const remainingValue = paid
-    ? getRemainingValue(node.price, node.billing_cycle, node.expired_at)
+    ? isOneTime || expireStatus === "long_term"
+      ? node.price
+      : getRemainingValue(node.price, node.billing_cycle, node.expired_at)
     : 0;
   const tags = parseNodeTags(node.tags);
   const ping = useNodePingStats(
@@ -89,21 +92,21 @@ export function NodeCard({
 
   const priceText = paid
     ? formatPriceWithCycle(node.price, node.billing_cycle, node.currency || "¥")
-    : free
+    : node.price === -1
       ? "免费"
       : "";
 
   const remainingText = free
     ? "长期"
     : paid
-      ? expireStatus === "expired"
-        ? "已过期"
-        : expireStatus === "long_term"
-          ? "长期"
+      ? isOneTime || expireStatus === "long_term"
+        ? "长期"
+        : expireStatus === "expired"
+          ? "已过期"
           : expireStatus === "unknown"
-            ? "未设置"
+            ? "长期"
             : `${remainingDays} 天`
-      : "";
+      : "长期";
 
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" || event.key === " ") {

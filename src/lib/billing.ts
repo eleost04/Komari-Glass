@@ -7,7 +7,7 @@ import {
 /** Price / remaining-value helpers (aligned with Glass theme semantics). */
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const LONG_TERM_DAYS = 36500;
+const LONG_TERM_DAYS = 3650;
 
 type ExpireStatus = "unknown" | "expired" | "normal" | "long_term";
 
@@ -180,9 +180,10 @@ export function getRemainingValue(
   expiredAt: string | number | null | undefined
 ): number {
   if (!isPaidPrice(price)) return 0;
+  if (billingCycle === -1) return price;
   const status = getExpireStatus(expiredAt);
-  if (status === "unknown" || status === "expired") return 0;
   if (status === "long_term") return price;
+  if (status === "unknown" || status === "expired") return 0;
   const days = getDaysUntilExpired(expiredAt);
   if (billingCycle <= 0) return price;
   return price * Math.min(days / billingCycle, 1);

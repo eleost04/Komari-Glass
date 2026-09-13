@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   // Komari server replaces these exact strings in dist/index.html
   title: "Komari Monitor",
   description: "A simple server monitor tool.",
+  icons: {
+    icon: "/favicon.ico?v=2",
+    apple: "/favicon.ico?v=2",
+  },
 };
 
 export default function RootLayout({
