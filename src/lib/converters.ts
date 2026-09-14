@@ -19,6 +19,7 @@ export function convertNodeStatsToLiveStatus(
     process: stats.process,
     connections: stats.connections.tcp,
     connections_udp: stats.connections.udp,
+    battery: stats.battery,
     online: isOnline,
     uptime: stats.uptime,
     message: stats.message,

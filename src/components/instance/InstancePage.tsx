@@ -5,9 +5,12 @@ import {
   Activity,
   ArrowLeft,
   RadioTower,
+  ShieldCheck,
 } from "lucide-react";
+import { BatteryBadge } from "@/components/BatteryBadge";
 import { Flag } from "@/components/Flag";
 import { InstanceInfo } from "@/components/instance/InstanceInfo";
+import { IpQualityPanel } from "@/components/instance/IpQualityPanel";
 import { LoadCharts } from "@/components/instance/LoadCharts";
 import { PingChart } from "@/components/instance/PingChart";
 import { Loading } from "@/components/Loading";
@@ -32,7 +35,7 @@ export function InstancePage({ uuid }: { uuid: string }) {
     () => nodes.find((item) => item.uuid === uuid) || null,
     [nodes, uuid]
   );
-  const [chartType, setChartType] = useState<"load" | "ping">("load");
+  const [chartType, setChartType] = useState<"load" | "ping" | "ip">("load");
   const [loadHours, setLoadHours] = useState(0);
   const [pingHours, setPingHours] = useState(1);
 
@@ -93,6 +96,7 @@ export function InstancePage({ uuid }: { uuid: string }) {
               >
                 {node.online ? "在线" : "离线"}
               </span>
+              {node.battery ? <BatteryBadge battery={node.battery} /> : null}
             </div>
             <div className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -150,38 +154,51 @@ export function InstancePage({ uuid }: { uuid: string }) {
                 延迟
               </button>
             ) : null}
+            <button
+              type="button"
+              className={cn("segment-btn", chartType === "ip" && "segment-btn-active")}
+              onClick={() => setChartType("ip")}
+              aria-pressed={chartType === "ip"}
+            >
+              <ShieldCheck className="size-3.5" />
+              IP 质量
+            </button>
           </div>
 
-          <div className="segmented-control max-w-full overflow-x-auto" aria-label="时间范围">
-            {(chartType === "load" ? loadRanges : pingRanges).map((range) => {
-              const active =
-                chartType === "load"
-                  ? loadHours === range.hours
-                  : pingHours === range.hours;
-              return (
-                <button
-                  key={range.hours}
-                  type="button"
-                  className={cn("segment-btn", active && "segment-btn-active")}
-                  onClick={() =>
-                    chartType === "load"
-                      ? setLoadHours(range.hours)
-                      : setPingHours(range.hours)
-                  }
-                  aria-pressed={active}
-                >
-                  {range.label}
-                </button>
-              );
-            })}
-          </div>
+          {chartType !== "ip" ? (
+            <div className="segmented-control max-w-full overflow-x-auto" aria-label="时间范围">
+              {(chartType === "load" ? loadRanges : pingRanges).map((range) => {
+                const active =
+                  chartType === "load"
+                    ? loadHours === range.hours
+                    : pingHours === range.hours;
+                return (
+                  <button
+                    key={range.hours}
+                    type="button"
+                    className={cn("segment-btn", active && "segment-btn-active")}
+                    onClick={() =>
+                      chartType === "load"
+                        ? setLoadHours(range.hours)
+                        : setPingHours(range.hours)
+                    }
+                    aria-pressed={active}
+                  >
+                    {range.label}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
 
         <div>
           {chartType === "load" ? (
             <LoadCharts node={node} hours={loadHours} />
-          ) : (
+          ) : chartType === "ping" ? (
             <PingChart uuid={node.uuid} hours={pingHours} />
+          ) : (
+            <IpQualityPanel node={node} />
           )}
         </div>
       </section>

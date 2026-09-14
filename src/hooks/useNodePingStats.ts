@@ -22,10 +22,14 @@ export interface PingTaskSelection {
   telecom: string;
   mobile: string;
   unicom: string;
+  telecomLabel?: string;
+  mobileLabel?: string;
+  unicomLabel?: string;
 }
 
 export interface NodePingTaskRow {
   id: number;
+  key: string;
   label: string;
   name: string;
   color: string;
@@ -162,10 +166,10 @@ async function loadPingData(
 }
 
 function latencyClass(ms: number): string {
-  if (ms <= 60) return "bg-signal-1";
-  if (ms <= 100) return "bg-signal-2";
-  if (ms <= 160) return "bg-signal-3";
-  if (ms <= 200) return "bg-signal-4";
+  if (ms <= 80) return "bg-signal-1";
+  if (ms <= 160) return "bg-signal-2";
+  if (ms <= 240) return "bg-signal-3";
+  if (ms <= 320) return "bg-signal-4";
   return "bg-signal-5";
 }
 
@@ -293,6 +297,14 @@ export function useNodePingStats(
       }
     }
 
+    const getSlotLabel = (key: string, fallback: string) => {
+      if (!selection) return fallback;
+      if (key === "telecom" && selection.telecomLabel?.trim()) return selection.telecomLabel.trim();
+      if (key === "mobile" && selection.mobileLabel?.trim()) return selection.mobileLabel.trim();
+      if (key === "unicom" && selection.unicomLabel?.trim()) return selection.unicomLabel.trim();
+      return fallback;
+    };
+
     const selected = !selection
       ? []
       : configuredMode
@@ -306,7 +318,8 @@ export function useNodePingStats(
           return [{
             task,
             summary,
-            label: slot.label,
+            key: slot.key,
+            label: getSlotLabel(slot.key, slot.label),
             color: slot.color,
           }];
         })
@@ -318,14 +331,16 @@ export function useNodePingStats(
           return [{
             task,
             summary,
-            label: slot.label,
+            key: slot.key,
+            label: getSlotLabel(slot.key, slot.label),
             color: slot.color,
           }];
         });
 
     const tasks = selected.map<NodePingTaskRow>(
-      ({ task, summary, label, color }) => ({
+      ({ task, summary, key, label, color }) => ({
         id: task.id,
+        key,
         label,
         name: task.name,
         color,

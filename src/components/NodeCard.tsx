@@ -10,6 +10,8 @@ import {
   Upload,
 } from "lucide-react";
 import { Flag } from "@/components/Flag";
+import { BatteryBadge } from "@/components/BatteryBadge";
+import { CarrierIcon } from "@/components/CarrierIcon";
 import { ProgressBar } from "@/components/ProgressBar";
 import {
   useNodePingStats,
@@ -146,6 +148,7 @@ export function NodeCard({
           {node.name}
         </h2>
         <div className="flex shrink-0 items-center gap-1.5">
+          {node.battery ? <BatteryBadge battery={node.battery} /> : null}
           {node.message?.trim() ? (
             <AlertTriangle
               className="size-3.5 fill-warning/20 text-warning"
@@ -469,10 +472,7 @@ function PingTaskColumn({
                 className="flex min-w-0 items-center gap-1 text-[11px] leading-4"
                 title={row.name}
               >
-                <span
-                  className="size-2 shrink-0 rounded-full"
-                  style={{ backgroundColor: row.color }}
-                />
+                <CarrierIcon carrier={row.key} className="size-3.5 shrink-0" />
                 <span className="shrink-0 whitespace-nowrap">{row.label}</span>
                 <span className="ml-auto shrink-0 font-semibold tabular-nums">
                   {kind === "latency" ? row.latencyDisplay : row.lossDisplay}

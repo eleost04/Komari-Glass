@@ -14,6 +14,9 @@ export interface ThemeSettings {
   telecomPingTaskName?: string;
   mobilePingTaskName?: string;
   unicomPingTaskName?: string;
+  telecomPingLabel?: string;
+  mobilePingLabel?: string;
+  unicomPingLabel?: string;
 }
 
 export interface PublicInfo {
@@ -83,6 +86,7 @@ export interface NodeStats {
     totalDown: number;
   };
   connections: { tcp: number; udp: number };
+  battery?: BatteryStatus;
   uptime: number;
   process: number;
   message: string;
@@ -105,9 +109,16 @@ export interface LiveStatus {
   process: number;
   connections: number;
   connections_udp: number;
+  battery?: BatteryStatus;
   online: boolean;
   uptime: number;
   message: string;
+}
+
+export interface BatteryStatus {
+  level: number;
+  charging: boolean;
+  status?: string;
 }
 
 export type LiveStatusMap = Record<string, LiveStatus>;
@@ -115,6 +126,7 @@ export type LiveStatusMap = Record<string, LiveStatus>;
 /** Merged node for card rendering */
 export interface DisplayNode extends NodeData {
   online: boolean;
+  battery?: BatteryStatus;
   cpu: number;
   ram: number;
   disk: number;

@@ -21,6 +21,9 @@ const DEFAULT_THEME_SETTINGS: Required<
     | "telecomPingTaskName"
     | "mobilePingTaskName"
     | "unicomPingTaskName"
+    | "telecomPingLabel"
+    | "mobilePingLabel"
+    | "unicomPingLabel"
   >
 > = {
   defaultAppearance: "system",
@@ -37,6 +40,9 @@ const DEFAULT_THEME_SETTINGS: Required<
   telecomPingTaskName: "",
   mobilePingTaskName: "",
   unicomPingTaskName: "",
+  telecomPingLabel: "",
+  mobilePingLabel: "",
+  unicomPingLabel: "",
 };
 
 export function mergeThemeSettings(
@@ -69,6 +75,9 @@ export function mergeThemeSettings(
     telecomPingTaskName: normalizePingTaskName(src.telecomPingTaskName),
     mobilePingTaskName: normalizePingTaskName(src.mobilePingTaskName),
     unicomPingTaskName: normalizePingTaskName(src.unicomPingTaskName),
+    telecomPingLabel: normalizePingTaskName(src.telecomPingLabel),
+    mobilePingLabel: normalizePingTaskName(src.mobilePingLabel),
+    unicomPingLabel: normalizePingTaskName(src.unicomPingLabel),
   };
 }
 

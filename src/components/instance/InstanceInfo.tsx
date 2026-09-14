@@ -1,12 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import {
   Box,
-  Check,
-  Copy,
   Cpu,
-  Globe,
   Network,
   Radio,
   ServerCog,
@@ -58,37 +54,6 @@ function InfoGroup({
       </h2>
       <div>{children}</div>
     </section>
-  );
-}
-
-function CopyableIp({ label, ip }: { label: string; ip?: string }) {
-  const [copied, setCopied] = useState(false);
-  if (!ip) return null;
-
-  const handleCopy = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-      void navigator.clipboard.writeText(ip);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    }
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      title="点击复制"
-      className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-mono bg-foreground/5 hover:bg-foreground/10 transition-colors text-foreground"
-    >
-      <span className="text-muted-foreground">{label}:</span>
-      <span>{ip}</span>
-      {copied ? (
-        <Check className="size-3 text-success" />
-      ) : (
-        <Copy className="size-3 text-muted-foreground" />
-      )}
-    </button>
   );
 }
 
@@ -156,21 +121,6 @@ export function InstanceInfo({ node }: { node: DisplayNode }) {
           />
         </div>
       </InfoGroup>
-
-      {node.ipv4 || node.ipv6 ? (
-        <section className="glass-panel rounded-lg p-4 lg:col-span-2">
-          <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold">
-            <span className="text-primary [&>svg]:size-4">
-              <Globe />
-            </span>
-            网络地址
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            <CopyableIp label="IPv4" ip={node.ipv4} />
-            <CopyableIp label="IPv6" ip={node.ipv6} />
-          </div>
-        </section>
-      ) : null}
 
       {node.public_remark ? (
         <section className="glass-panel rounded-lg p-4 lg:col-span-2">

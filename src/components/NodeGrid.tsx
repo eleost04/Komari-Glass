@@ -48,6 +48,9 @@ export function NodeGrid() {
             telecom: settings.telecomPingTaskName,
             mobile: settings.mobilePingTaskName,
             unicom: settings.unicomPingTaskName,
+            telecomLabel: settings.telecomPingLabel,
+            mobileLabel: settings.mobilePingLabel,
+            unicomLabel: settings.unicomPingLabel,
           }}
           onClick={() => goInstance(node.uuid)}
         />

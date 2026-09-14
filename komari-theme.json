@@ -128,6 +128,45 @@
         }
       },
       {
+        "key": "telecomPingLabel",
+        "name": {
+          "zh-CN": "电信显示文本",
+          "en": "Telecom Display Label"
+        },
+        "type": "string",
+        "default": "",
+        "help": {
+          "zh-CN": "三网延迟中电信的展示名称。留空默认显示“电信”。",
+          "en": "Custom label for Telecom in ping panels. Leave empty for default '电信'."
+        }
+      },
+      {
+        "key": "mobilePingLabel",
+        "name": {
+          "zh-CN": "移动显示文本",
+          "en": "Mobile Display Label"
+        },
+        "type": "string",
+        "default": "",
+        "help": {
+          "zh-CN": "三网延迟中移动的展示名称。留空默认显示“移动”。",
+          "en": "Custom label for Mobile in ping panels. Leave empty for default '移动'."
+        }
+      },
+      {
+        "key": "unicomPingLabel",
+        "name": {
+          "zh-CN": "联通显示文本",
+          "en": "Unicom Display Label"
+        },
+        "type": "string",
+        "default": "",
+        "help": {
+          "zh-CN": "三网延迟中联通的展示名称。留空默认显示“联通”。",
+          "en": "Custom label for Unicom in ping panels. Leave empty for default '联通'."
+        }
+      },
+      {
         "name": {
           "zh-CN": "首页总览",
           "en": "Overview"

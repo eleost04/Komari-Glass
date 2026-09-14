@@ -70,6 +70,7 @@ function mergeNode(
     process: live?.process ?? 0,
     connections: live?.connections ?? 0,
     connections_udp: live?.connections_udp ?? 0,
+    battery: live?.battery,
     message: live?.message,
     updated_at_live: live?.time,
   };
