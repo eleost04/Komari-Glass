@@ -96,7 +96,12 @@ export function InstancePage({ uuid }: { uuid: string }) {
               >
                 {node.online ? "在线" : "离线"}
               </span>
-              {node.battery ? <BatteryBadge battery={node.battery} /> : null}
+              {node.battery ? (
+                <BatteryBadge
+                  battery={node.battery}
+                  temperature={node.temperature?.battery}
+                />
+              ) : null}
             </div>
             <div className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
               {/* eslint-disable-next-line @next/next/no-img-element */}

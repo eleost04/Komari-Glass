@@ -8,6 +8,7 @@ import {
   ServerCog,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { TemperatureChip } from "@/components/TemperatureChip";
 import { formatUptime } from "@/lib/format";
 import type { DisplayNode } from "@/lib/types";
 
@@ -65,7 +66,12 @@ export function InstanceInfo({ node }: { node: DisplayNode }) {
           <InfoItem
             label="处理器"
             icon={<Cpu />}
-            value={`${node.cpu_name || "--"} (x${node.cpu_cores || 0})`}
+            value={
+              <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                <span>{`${node.cpu_name || "--"} (x${node.cpu_cores || 0})`}</span>
+                <TemperatureChip value={node.temperature?.cpu} />
+              </span>
+            }
           />
           <InfoItem
             label="架构"

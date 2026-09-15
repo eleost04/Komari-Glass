@@ -20,6 +20,7 @@ export function convertNodeStatsToLiveStatus(
     connections: stats.connections.tcp,
     connections_udp: stats.connections.udp,
     battery: stats.battery,
+    temperature: stats.temperature,
     online: isOnline,
     uptime: stats.uptime,
     message: stats.message,

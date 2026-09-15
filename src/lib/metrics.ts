@@ -71,6 +71,7 @@ function mergeNode(
     connections: live?.connections ?? 0,
     connections_udp: live?.connections_udp ?? 0,
     battery: live?.battery,
+    temperature: live?.temperature,
     message: live?.message,
     updated_at_live: live?.time,
   };

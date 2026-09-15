@@ -87,6 +87,7 @@ export interface NodeStats {
   };
   connections: { tcp: number; udp: number };
   battery?: BatteryStatus;
+  temperature?: TemperatureStatus;
   uptime: number;
   process: number;
   message: string;
@@ -110,6 +111,7 @@ export interface LiveStatus {
   connections: number;
   connections_udp: number;
   battery?: BatteryStatus;
+  temperature?: TemperatureStatus;
   online: boolean;
   uptime: number;
   message: string;
@@ -121,12 +123,18 @@ export interface BatteryStatus {
   status?: string;
 }
 
+export interface TemperatureStatus {
+  cpu?: number;
+  battery?: number;
+}
+
 export type LiveStatusMap = Record<string, LiveStatus>;
 
 /** Merged node for card rendering */
 export interface DisplayNode extends NodeData {
   online: boolean;
   battery?: BatteryStatus;
+  temperature?: TemperatureStatus;
   cpu: number;
   ram: number;
   disk: number;

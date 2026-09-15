@@ -6,9 +6,11 @@ import type { BatteryStatus } from "@/lib/types";
 
 export function BatteryBadge({
   battery,
+  temperature,
   className,
 }: {
   battery?: BatteryStatus;
+  temperature?: number;
   className?: string;
 }) {
   if (!battery || typeof battery.level !== "number" || battery.level < 0) {
@@ -17,10 +19,12 @@ export function BatteryBadge({
 
   const { level, charging } = battery;
   const isLow = level < 20 && !charging;
+  const hasTemp = typeof temperature === "number" && temperature > 0;
 
+  const tempText = hasTemp ? `，温度 ${Math.round(temperature)}°C` : "";
   const tooltip = charging
-    ? `电池电量: ${level}% (正在充电)`
-    : `电池电量: ${level}% (未在充电)`;
+    ? `电池电量: ${level}% (正在充电)${tempText}`
+    : `电池电量: ${level}% (未在充电)${tempText}`;
 
   return (
     <div
@@ -44,6 +48,20 @@ export function BatteryBadge({
         <Battery className="size-3.5 shrink-0 text-muted-foreground" />
       )}
       <span>{level}%</span>
+      {hasTemp ? (
+        <span
+          className={cn(
+            "border-l border-current/20 pl-1",
+            temperature >= 45
+              ? "text-destructive"
+              : temperature >= 40
+                ? "text-warning"
+                : "opacity-70"
+          )}
+        >
+          {Math.round(temperature)}°C
+        </span>
+      ) : null}
     </div>
   );
 }

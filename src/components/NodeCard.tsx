@@ -12,6 +12,7 @@ import {
 import { Flag } from "@/components/Flag";
 import { BatteryBadge } from "@/components/BatteryBadge";
 import { CarrierIcon } from "@/components/CarrierIcon";
+import { TemperatureChip } from "@/components/TemperatureChip";
 import { ProgressBar } from "@/components/ProgressBar";
 import {
   useNodePingStats,
@@ -148,7 +149,12 @@ export function NodeCard({
           {node.name}
         </h2>
         <div className="flex shrink-0 items-center gap-1.5">
-          {node.battery ? <BatteryBadge battery={node.battery} /> : null}
+          {node.battery ? (
+            <BatteryBadge
+              battery={node.battery}
+              temperature={node.temperature?.battery}
+            />
+          ) : null}
           {node.message?.trim() ? (
             <AlertTriangle
               className="size-3.5 fill-warning/20 text-warning"
@@ -194,6 +200,7 @@ export function NodeCard({
             percent={node.cpu}
             sub={`${node.load.toFixed(2)}, ${node.load5.toFixed(2)}, ${node.load15.toFixed(2)}`}
             muted={!node.online}
+            trailing={<TemperatureChip value={node.temperature?.cpu} />}
           />
           <Metric
             label="内存"
@@ -320,6 +327,7 @@ function Metric({
   valueClassName,
   subClassName,
   muted,
+  trailing,
 }: {
   label: string;
   value: string;
@@ -329,13 +337,17 @@ function Metric({
   valueClassName?: string;
   subClassName?: string;
   muted?: boolean;
+  trailing?: React.ReactNode;
 }) {
   return (
     <div className={cn("flex min-w-0 flex-col gap-1", muted && "opacity-55")}>
       <div className="flex items-center justify-between gap-2 text-xs">
         <span className="text-muted-foreground">{label}</span>
-        <span className={cn("font-medium tabular-nums", valueClassName)}>
-          {value}
+        <span className="flex min-w-0 items-center gap-1.5">
+          {trailing}
+          <span className={cn("font-medium tabular-nums", valueClassName)}>
+            {value}
+          </span>
         </span>
       </div>
       <ProgressBar
