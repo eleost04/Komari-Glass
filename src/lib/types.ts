@@ -67,6 +67,8 @@ export interface NodeData {
   expired_at: string | null;
   group: string;
   tags: string;
+  /** 隐私标签（仅登录管理员可见；未登录时后端不返回） */
+  private_tags?: string;
   public_remark?: string;
   ipv4?: string;
   ipv6?: string;

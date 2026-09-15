@@ -82,6 +82,8 @@ export function NodeCard({
       : getRemainingValue(node.price, node.billing_cycle, node.expired_at)
     : 0;
   const tags = parseNodeTags(node.tags);
+  // 隐私标签：后端仅对登录管理员返回，字段为空即代表访客，无需额外判断登录态。
+  const privateTags = parseNodeTags(node.private_tags);
   const ping = useNodePingStats(
     node.uuid,
     pingEnabled,
@@ -299,13 +301,22 @@ export function NodeCard({
           </div>
         )}
 
-        {tags.length > 0 ? (
+        {tags.length > 0 || privateTags.length > 0 ? (
           <div className="flex flex-wrap items-center gap-1">
             {tags.map((tag, index) => (
               <span
                 key={`${tag.text}-${index}`}
                 className="node-tag max-w-full truncate"
                 title={tag.text}
+              >
+                {tag.text}
+              </span>
+            ))}
+            {privateTags.map((tag, index) => (
+              <span
+                key={`private-${tag.text}-${index}`}
+                className="node-tag node-tag-private max-w-full truncate"
+                title={`仅登录可见：${tag.text}`}
               >
                 {tag.text}
               </span>

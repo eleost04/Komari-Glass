@@ -405,6 +405,15 @@ html[data-blur="on"] .node-offline-overlay {
   color: var(--muted-foreground);
 }
 
+/* 隐私标签：仅登录管理员可见（由后端对访客剥离），样式上做低调区分 */
+.node-card .node-tag-private,
+.node-tag-private {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--warning) 42%, transparent);
+  color: color-mix(in srgb, var(--warning) 88%, var(--foreground));
+  background: color-mix(in srgb, var(--warning) 7%, transparent);
+}
+
 .segmented-control {
   display: inline-flex;
   min-height: 2.25rem;

@@ -70,6 +70,8 @@ export function InstancePage({ uuid }: { uuid: string }) {
   }
 
   const tags = parseNodeTags(node.tags);
+  // 隐私标签：后端仅对登录管理员返回，字段为空即代表访客。
+  const privateTags = parseNodeTags(node.private_tags);
 
   return (
     <div className="space-y-3.5">
@@ -121,12 +123,21 @@ export function InstancePage({ uuid }: { uuid: string }) {
               </span>
             </div>
           </div>
-          {tags.length > 0 ? (
+          {tags.length > 0 || privateTags.length > 0 ? (
             <div className="hidden max-w-[38%] items-center gap-1 overflow-hidden md:flex">
               {tags.slice(0, 4).map((tag, index) => (
                 <span
                   key={`${tag.text}-${index}`}
                   className={cn("node-tag shrink-0", getTagToneClass(tag.tone))}
+                >
+                  {tag.text}
+                </span>
+              ))}
+              {privateTags.slice(0, 4).map((tag, index) => (
+                <span
+                  key={`private-${tag.text}-${index}`}
+                  className="node-tag node-tag-private shrink-0"
+                  title={`仅登录可见：${tag.text}`}
                 >
                   {tag.text}
                 </span>
