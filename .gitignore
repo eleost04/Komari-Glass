@@ -9,3 +9,4 @@ release
 *.tsbuildinfo
 .env*
 .codex
+next-env.d.ts
