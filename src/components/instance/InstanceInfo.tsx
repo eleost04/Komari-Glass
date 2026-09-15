@@ -58,7 +58,13 @@ function InfoGroup({
   );
 }
 
-export function InstanceInfo({ node }: { node: DisplayNode }) {
+export function InstanceInfo({
+  node,
+  showTemperature = true,
+}: {
+  node: DisplayNode;
+  showTemperature?: boolean;
+}) {
   return (
     <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
       <InfoGroup title="硬件信息" icon={<Cpu />}>
@@ -69,7 +75,9 @@ export function InstanceInfo({ node }: { node: DisplayNode }) {
             value={
               <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <span>{`${node.cpu_name || "--"} (x${node.cpu_cores || 0})`}</span>
-                <TemperatureChip value={node.temperature?.cpu} />
+                {showTemperature ? (
+                  <TemperatureChip value={node.temperature?.cpu} />
+                ) : null}
               </span>
             }
           />

@@ -44,6 +44,8 @@ export function NodeGrid() {
           node={node}
           pingEnabled={metricRetention.pingHours >= 1}
           showCarrierPing={settings.showCarrierPing}
+          showBattery={settings.showBattery}
+          showTemperature={settings.showTemperature}
           pingTaskSelection={{
             telecom: settings.telecomPingTaskName,
             mobile: settings.mobilePingTaskName,

@@ -24,6 +24,8 @@ const DEFAULT_THEME_SETTINGS: Required<
     | "telecomPingLabel"
     | "mobilePingLabel"
     | "unicomPingLabel"
+    | "showBattery"
+    | "showTemperature"
   >
 > = {
   defaultAppearance: "system",
@@ -43,6 +45,8 @@ const DEFAULT_THEME_SETTINGS: Required<
   telecomPingLabel: "",
   mobilePingLabel: "",
   unicomPingLabel: "",
+  showBattery: true,
+  showTemperature: true,
 };
 
 export function mergeThemeSettings(
@@ -78,6 +82,11 @@ export function mergeThemeSettings(
     telecomPingLabel: normalizePingTaskName(src.telecomPingLabel),
     mobilePingLabel: normalizePingTaskName(src.mobilePingLabel),
     unicomPingLabel: normalizePingTaskName(src.unicomPingLabel),
+    showBattery: bool(src.showBattery, DEFAULT_THEME_SETTINGS.showBattery),
+    showTemperature: bool(
+      src.showTemperature,
+      DEFAULT_THEME_SETTINGS.showTemperature
+    ),
   };
 }
 

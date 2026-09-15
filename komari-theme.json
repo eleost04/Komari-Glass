@@ -167,6 +167,32 @@
         }
       },
       {
+        "key": "showBattery",
+        "name": {
+          "zh-CN": "显示电池电量",
+          "en": "Show Battery Level"
+        },
+        "type": "switch",
+        "default": true,
+        "help": {
+          "zh-CN": "仅对带电池的设备生效（如手机、笔记本），无电池的设备不显示。",
+          "en": "Only applies to devices with a battery; devices without one show nothing."
+        }
+      },
+      {
+        "key": "showTemperature",
+        "name": {
+          "zh-CN": "显示温度",
+          "en": "Show Temperature"
+        },
+        "type": "switch",
+        "default": true,
+        "help": {
+          "zh-CN": "显示 CPU/SoC 与电池温度。仅对能读取到温度传感器的设备生效。",
+          "en": "Show CPU/SoC and battery temperature. Only applies where sensors are readable."
+        }
+      },
+      {
         "name": {
           "zh-CN": "首页总览",
           "en": "Overview"

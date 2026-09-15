@@ -17,6 +17,8 @@ export interface ThemeSettings {
   telecomPingLabel?: string;
   mobilePingLabel?: string;
   unicomPingLabel?: string;
+  showBattery?: boolean;
+  showTemperature?: boolean;
 }
 
 export interface PublicInfo {

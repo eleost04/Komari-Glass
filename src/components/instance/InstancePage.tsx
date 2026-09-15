@@ -30,7 +30,7 @@ const LOAD_RANGES = [
 ];
 
 export function InstancePage({ uuid }: { uuid: string }) {
-  const { nodes, loading, metricRetention, goHome } = useApp();
+  const { nodes, loading, metricRetention, settings, goHome } = useApp();
   const node = useMemo(
     () => nodes.find((item) => item.uuid === uuid) || null,
     [nodes, uuid]
@@ -96,10 +96,12 @@ export function InstancePage({ uuid }: { uuid: string }) {
               >
                 {node.online ? "在线" : "离线"}
               </span>
-              {node.battery ? (
+              {node.battery && settings.showBattery ? (
                 <BatteryBadge
                   battery={node.battery}
-                  temperature={node.temperature?.battery}
+                  temperature={
+                    settings.showTemperature ? node.temperature?.battery : undefined
+                  }
                 />
               ) : null}
             </div>
@@ -134,7 +136,7 @@ export function InstancePage({ uuid }: { uuid: string }) {
         </div>
       </section>
 
-      <InstanceInfo node={node} />
+      <InstanceInfo node={node} showTemperature={settings.showTemperature} />
 
       <section className="space-y-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">

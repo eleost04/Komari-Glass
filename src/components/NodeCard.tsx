@@ -49,12 +49,16 @@ export function NodeCard({
   node,
   pingEnabled,
   showCarrierPing,
+  showBattery,
+  showTemperature,
   pingTaskSelection,
   onClick,
 }: {
   node: DisplayNode;
   pingEnabled: boolean;
   showCarrierPing: boolean;
+  showBattery: boolean;
+  showTemperature: boolean;
   pingTaskSelection: PingTaskSelection;
   onClick: () => void;
 }) {
@@ -149,10 +153,10 @@ export function NodeCard({
           {node.name}
         </h2>
         <div className="flex shrink-0 items-center gap-1.5">
-          {node.battery ? (
+          {node.battery && showBattery ? (
             <BatteryBadge
               battery={node.battery}
-              temperature={node.temperature?.battery}
+              temperature={showTemperature ? node.temperature?.battery : undefined}
             />
           ) : null}
           {node.message?.trim() ? (
@@ -200,7 +204,11 @@ export function NodeCard({
             percent={node.cpu}
             sub={`${node.load.toFixed(2)}, ${node.load5.toFixed(2)}, ${node.load15.toFixed(2)}`}
             muted={!node.online}
-            trailing={<TemperatureChip value={node.temperature?.cpu} />}
+            trailing={
+              showTemperature ? (
+                <TemperatureChip value={node.temperature?.cpu} />
+              ) : undefined
+            }
           />
           <Metric
             label="内存"
